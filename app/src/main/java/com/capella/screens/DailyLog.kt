@@ -1,6 +1,7 @@
 package com.capella.screens
 
 import android.content.Context
+import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -28,6 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.unit.dp
@@ -55,17 +60,20 @@ class DailyLog :ComponentActivity() {
 }
 
 @Composable
-fun DailyLogScreen(modifier: Modifier = Modifier){
+fun DailyLogScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+    var userMood by remember { mutableStateOf("") }
+    var dailyMessage by remember { mutableStateOf("") }
+    var wholesomeMoment by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement =  Arrangement.Center
-    ){
+        verticalArrangement = Arrangement.Center
+    ) {
 
         Spacer(modifier = Modifier.height(10.dp))
         Text(
@@ -75,7 +83,7 @@ fun DailyLogScreen(modifier: Modifier = Modifier){
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text( // might need adjustment
                 text = "Date:",
                 fontSize = 18.sp
@@ -89,7 +97,7 @@ fun DailyLogScreen(modifier: Modifier = Modifier){
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = "Time",
                 fontSize = 18.sp
@@ -107,21 +115,92 @@ fun DailyLogScreen(modifier: Modifier = Modifier){
 
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = "Mood:",
                 fontSize = 18.sp
             )
+            userMood = moodDropDownMenu(context)
 
         }
 
+        // message writing section
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Today's Feelings:",
+                fontSize = 24.sp,
+
+                )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(10.dp)
+        ) {
+            OutlinedTextField(
+                value = dailyMessage,
+                onValueChange = { dailyMessage = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                placeholder = { Text("How is your day going? ...") }
+            )
+        }
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Wholesome Moment",
+                fontSize = 24.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(10.dp)
+        ) {
+            OutlinedTextField(
+                value = wholesomeMoment,
+                onValueChange = { wholesomeMoment = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                placeholder = { Text("Share a positive moment from today...") }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Keep it up! You're doing great! 😊",
+                fontSize = 18.sp
+            )
+        }
+
     }
-
-
 }
 
+
+
+
+//mood drop down function
 @Composable
-fun moodDropDownMenu(context: Context){
+fun moodDropDownMenu(context: Context): String {
 
     var expanded by remember {mutableStateOf(false) }
     var userMood by remember { mutableStateOf("") }
@@ -144,6 +223,26 @@ fun moodDropDownMenu(context: Context){
                 }
             }
         )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+
+            //might need to addd more moods
+            val moods = listOf("Happy", "Sad", "Angry", "Excited", "Anxious", "Relaxed")
+            moods.forEach { mood ->
+                androidx.compose.material3.DropdownMenuItem(
+                    text = { Text(mood) },
+                    onClick = {
+                        userMood = mood
+                        expanded = false
+                    }
+                )
+                HorizontalDivider()
+            }
+        }
     }
+
+    return userMood
 
 }
