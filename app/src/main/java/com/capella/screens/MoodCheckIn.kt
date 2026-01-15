@@ -1,0 +1,142 @@
+package com.capella.screens
+
+import android.os.Bundle
+import android.widget.Space
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.capella.ui.theme.CapellaTheme
+import com.capella.Emotion
+import com.capella.emotions
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+
+class MoodCheckIn: ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CapellaTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    MoodSelectionScreen(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MoodSelectionScreen(modifier: Modifier = Modifier) {
+    // State to keep track of which emotion is selected
+    var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
+    var currentContext = LocalContext.current
+
+    // TODO: need to store the date and time along with emotion
+    val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+    val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "HOW ARE YOU FEELING?",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Black,
+            modifier = Modifier.padding(vertical = 24.dp)
+        )
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(4), // having 4 items per row
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(emotions) { emotion ->
+                EmotionItem(
+                    emotion = emotion,
+                    isSelected = selectedEmotion == emotion,
+                    onSelect = { selectedEmotion = emotion }
+                )
+            }
+        }
+
+       // TODO: need to store the emotion to database on confirmation
+        selectedEmotion?.let {
+            Button(
+                onClick = { /* Save to database */ },
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                Text("Confirm ${it.label}")
+            }
+        }
+    }
+}
+
+
+@Composable
+fun EmotionItem(
+    emotion: Emotion,
+    isSelected: Boolean,
+    onSelect: (Emotion) -> Unit
+
+){
+    Column(
+        modifier = Modifier
+            .clickable { onSelect(emotion) }
+            .padding(8.dp)
+            .border(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = if (isSelected) Color.Blue else Color.Transparent,
+                shape = RoundedCornerShape(8.dp)
+    )
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        Text(
+            text = emotion.icon,
+            fontSize = 48.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(
+            text = emotion.label,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+
