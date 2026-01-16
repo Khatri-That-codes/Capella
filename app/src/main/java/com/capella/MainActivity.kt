@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.capella.navigation.BottomBar
 import com.capella.navigation.NavGraph
 import com.capella.ui.theme.CapellaTheme
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
