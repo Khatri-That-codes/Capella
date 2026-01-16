@@ -45,7 +45,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class ViewAllJournalEntry : ComponentActivity() {
+class ViewGratefulMessage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -57,9 +57,9 @@ class ViewAllJournalEntry : ComponentActivity() {
                 ) {
                     val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
                         this,
-                        JournalEntryViewModelFactory(this@ViewAllJournalEntry)
+                        JournalEntryViewModelFactory(this@ViewGratefulMessage)
                     )[JournalEntryViewModel::class.java]
-                    ViewAllJournalEntriesScreen(
+                    GratefulMessageScreen(
                         journalEntryViewModel = journalEntryViewModel,
                         onBack = {
                             finish()
@@ -71,7 +71,7 @@ class ViewAllJournalEntry : ComponentActivity() {
 }
 
 @Composable
-fun ViewAllJournalEntriesScreen(
+fun GratefulMessageScreen(
     journalEntryViewModel: JournalEntryViewModel,
     onBack: () -> Unit
 ) {
@@ -87,7 +87,7 @@ fun ViewAllJournalEntriesScreen(
     ) { innerPadding ->
 
         Text(
-            text = "All Journal Entries",
+            text = "Your Wholesome Moments",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
@@ -114,7 +114,7 @@ fun ViewAllJournalEntriesScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "No Journal Entries Available",
+                        text = "No Wholesome Moments Available",
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center
                     )
@@ -129,7 +129,7 @@ fun ViewAllJournalEntriesScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(journalEntries) { entry ->
-                        JournalEntryCard(journalEntry = entry)
+                        GratefulMessageCard(journalEntry = entry)
                     }
                 }
             }
@@ -145,7 +145,7 @@ fun ViewAllJournalEntriesScreen(
 
 
 @Composable
-fun JournalEntryCard(journalEntry: JournalEntry) {
+fun GratefulMessageCard(journalEntry: JournalEntry) {
     val formattedDate = try {
         val parser = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
@@ -169,11 +169,7 @@ fun JournalEntryCard(journalEntry: JournalEntry) {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Message: ${journalEntry.message}",
-                fontSize = 14.sp
-            )
+
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Grateful Message: ${journalEntry.gratefulMessage}",
