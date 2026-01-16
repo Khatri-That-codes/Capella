@@ -9,7 +9,7 @@ import com.capella.models.JournalEntry
 import com.capella.models.MoodEntry
 
 
-@Database(entities = [MoodEntry::class, JournalEntry::class], version = 1)
+@Database(entities = [MoodEntry::class, JournalEntry::class], version = 1, exportSchema = false)
 
 abstract class AppDatabase : RoomDatabase() {
     abstract fun moodDao(): MoodDao

@@ -1,6 +1,7 @@
 package com.capella.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -10,11 +11,16 @@ import com.capella.models.MoodEntry
 interface MoodDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMoodEntry(moodEntry: MoodEntry)
+    suspend fun insertMoodEntry(entry: MoodEntry)
 
     @Query("SELECT * FROM mood_entry")
     suspend fun getAllMoodEntries(): List<MoodEntry>
 
-    @Query("DELETE FROM mood_entry WHERE id = :moodEntryId")
-    suspend fun deleteMoodEntryById(moodEntryId: Int)
+    @Query("SELECT * FROM mood_entry WHERE id = :id LIMIT 1")
+    suspend fun getMoodEntryById(id: Int): MoodEntry?
+
+    @Query("DELETE FROM mood_entry WHERE id = :id")
+    suspend fun deleteById(id: Int): Int
+
+
 }

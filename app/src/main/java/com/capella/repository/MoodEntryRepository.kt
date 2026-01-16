@@ -17,8 +17,8 @@ class MoodEntryRepository(context: Context) {
         return moodDao.getAllMoodEntries()
     }
 
-    suspend fun deleteMoodEntryById(moodEntryId: Int) {
-        moodDao.deleteMoodEntryById(moodEntryId)
-    }
+//    suspend fun deleteMoodEntryById(moodEntryId: Int) {
+//        moodDao.deleteMoodEntryById(moodEntryId)
+//    }
 
 }
