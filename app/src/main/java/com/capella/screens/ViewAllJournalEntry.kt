@@ -175,10 +175,7 @@ fun JournalEntryCard(journalEntry: JournalEntry) {
                 fontSize = 14.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Grateful Message: ${journalEntry.gratefulMessage}",
-                fontSize = 14.sp
-            )
+
         }
     }
 }
