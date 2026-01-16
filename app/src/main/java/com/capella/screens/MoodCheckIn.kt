@@ -1,6 +1,7 @@
 package com.capella.screens
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -32,23 +33,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import com.capella.ui.theme.CapellaTheme
 import com.capella.data_class.Emotion
 import com.capella.data_class.emotions
+import com.capella.models.MoodEntry
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.capella.viewModel.MoodEntryViewModel
+
 
 
 class MoodCheckIn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val moodEntryViewModel: MoodEntryViewModel = ViewModelProvider(
+            this,
+            MoodEntryViewModel.MoodEntryViewModelFactory(this@MoodCheckIn)
+        )[MoodEntryViewModel::class.java]
         setContent {
             CapellaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MoodSelectionScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        moodEntryViewModel = moodEntryViewModel,
+                        onSaved = {
+                            finish() // to return to home (prev screen)
+                        }
                     )
                 }
             }
@@ -58,12 +72,17 @@ class MoodCheckIn : ComponentActivity() {
 
 
 @Composable
-fun MoodSelectionScreen(modifier: Modifier = Modifier) {
+fun MoodSelectionScreen(
+    modifier: Modifier = Modifier,
+    moodEntryViewModel: MoodEntryViewModel,
+    onSaved: () ->Unit
+)
+{
     // State to keep track of which emotion is selected
     var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
     var currentContext = LocalContext.current
 
-    // TODO: need to store the date and time along with emotion
+
     val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
     Column(
@@ -93,13 +112,28 @@ fun MoodSelectionScreen(modifier: Modifier = Modifier) {
             }
         }
 
-       // TODO: need to store the emotion to database on confirmation
+
         selectedEmotion?.let {
             Button(
-                onClick = { /* Save to database */ },
+                onClick = {
+                    val entry = MoodEntry(
+                        id = 0,
+                        date = currentDate,
+                        timestamp = System.currentTimeMillis(),
+                        moodEmotion = it.icon,
+
+                        )
+
+                    moodEntryViewModel.insertMoodEntry(entry)
+
+                    //toast message
+                    Toast.makeText(currentContext, "Mood '${it.icon}' saved!\n OK to be Moody!", Toast.LENGTH_SHORT).show()
+
+                    onSaved()
+                },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
-                Text("Confirm ${it.label}")
+                Text("Confirm Mood")
             }
         }
     }
