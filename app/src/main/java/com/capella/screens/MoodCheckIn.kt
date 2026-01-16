@@ -1,7 +1,6 @@
 package com.capella.screens
 
 import android.os.Bundle
-import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -30,19 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capella.ui.theme.CapellaTheme
-import com.capella.Emotion
-import com.capella.emotions
+import com.capella.data_class.Emotion
+import com.capella.data_class.emotions
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
-class MoodCheckIn: ComponentActivity() {
+class MoodCheckIn : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -69,7 +67,9 @@ fun MoodSelectionScreen(modifier: Modifier = Modifier) {
     val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -121,7 +121,7 @@ fun EmotionItem(
                 width = if (isSelected) 2.dp else 0.dp,
                 color = if (isSelected) Color.Blue else Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
-    )
+            )
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally)
     {
