@@ -1,5 +1,6 @@
 package com.capella.screens
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.capella.R
 import com.capella.ui.theme.CapellaTheme
 
-class MainActivity : ComponentActivity() {
+class WelcomeScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +35,12 @@ class MainActivity : ComponentActivity() {
             CapellaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     WelcomeScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        onContinue = {
+                            val context = this@WelcomeScreen
+                            context.startActivity(Intent(context, Home::class.java))
+                            finish()
+                        }
                     )
                 }
             }
@@ -43,7 +49,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier) { // need to check if i need modifier here
+fun WelcomeScreen(modifier: Modifier = Modifier,
+                  onContinue: () -> Unit) { // need to check if i need modifier here
+
     val context = LocalContext.current   // having context to know the current state
 
     Column(
@@ -84,13 +92,15 @@ fun WelcomeScreen(modifier: Modifier = Modifier) { // need to check if i need mo
 
         Button(
             onClick = {
-              //  context.startActivity(Intent(context, login_validation_page::class.java)) -- need to add main
-                // page
+                onContinue()
+
+              // context.startActivity(Intent(context, Home::class.java))
+
 
             }
         ) {
             Text(
-                text = "Lessgoo",
+                text = "Okie Dokie! Let's Start ",
                 fontSize = 16.sp)
         }
 
