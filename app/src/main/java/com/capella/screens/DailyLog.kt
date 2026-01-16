@@ -2,6 +2,7 @@ package com.capella.screens
 
 import android.content.Context
 import android.widget.Space
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,13 +33,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.motionEventSpy
-import androidx.compose.ui.node.ModifierNodeElement
+
 import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import com.capella.models.JournalEntry
 import com.capella.ui.theme.CapellaTheme
+import com.capella.viewModel.JournalEntryViewModel
+import java.lang.Long
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,11 +51,22 @@ class DailyLog :ComponentActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
+            this,
+            JournalEntryViewModel.JournalEntryViewModelFactory(this@DailyLog)
+        )[JournalEntryViewModel::class.java]
+
         setContent{
             CapellaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     DailyLogScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        journalEntryViewModel = journalEntryViewModel,
+                        onSaved = {
+                            finish() // to return to home screen after saving
+
+                        }
                     )
                 }
             }
@@ -59,14 +75,22 @@ class DailyLog :ComponentActivity() {
     }
 }
 
+// TODO: add save button to store data locally or in database   , home button/ nav bar,  back button.
+
 @Composable
-fun DailyLogScreen(modifier: Modifier = Modifier) {
+fun DailyLogScreen(
+    modifier: Modifier = Modifier,
+                   journalEntryViewModel: JournalEntryViewModel,
+                   onSaved: () ->Unit
+) {
+
     val context = LocalContext.current
     val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
     val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
     var userMood by remember { mutableStateOf("") }
     var dailyMessage by remember { mutableStateOf("") }
     var wholesomeMoment by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -186,12 +210,39 @@ fun DailyLogScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Keep it up! You're doing great! 😊",
-                fontSize = 18.sp
-            )
-        }
+            // save button to save the journal entry to database
+            Button(
+                onClick = {
 
+                    val entry = JournalEntry(
+                        id = 0, // auto-generated ID
+                        date = currentDate,
+                        timestamp = System.currentTimeMillis(),
+                        gratefulMessage = wholesomeMoment,
+                        message = dailyMessage
+                    )
+
+                    journalEntryViewModel.insertJournalEntry(entry)
+
+
+                    // successful toast
+                    Toast.makeText(
+                        context,
+                        "Journal Entry Saved! \n Keep it up! You're doing great! \uD83D\uDE0A",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            ){
+                Text(
+                    text = "Save Entry",
+                    fontSize = 18.sp
+                )
+            }
+//            Text(
+//                text = "Keep it up! You're doing great! 😊",
+//                fontSize = 18.sp
+//            )
+        }
     }
 }
 
