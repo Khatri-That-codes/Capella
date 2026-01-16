@@ -1,4 +1,4 @@
-package com.capella
+package com.capella.data_class
 
 data class Emotion(
     val label: String,
