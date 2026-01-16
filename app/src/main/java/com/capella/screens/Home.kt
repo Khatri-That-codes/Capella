@@ -1,6 +1,7 @@
 // kotlin
 package com.capella.screens
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,10 +51,15 @@ class Home : ComponentActivity() {
     }
 }
 
+
+
+
+
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewModel()) {
-    val username = "User"
+    val username = "Buddy 😋"
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -61,7 +67,7 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
             .padding(16.dp)
     ) {
         Text(
-            text = "Welcome, $username!",
+            text = "Hey, $username!",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -103,17 +109,22 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = { /* Navigate to Daily Log Screen */ }) {
+            Button(onClick = { context.startActivity(Intent(context, DailyLog::class.java)) }) {
                 Text("Daily Log")
             }
-            Button(onClick = { /* Navigate to Mood Check-In Screen */ }, modifier = Modifier.padding(start = 12.dp)) {
+            Button(onClick = { context.startActivity(Intent(context,MoodCheckIn::class.java)) }, modifier = Modifier.padding(start = 12.dp)) {
                 Text("Mood Check-In")
             }
         }
 
-        Button(onClick = { /* Navigate to Stats Screen */ }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text("View Past Journals")
+        Button(onClick = { context.startActivity(Intent(context,ViewGratefulMessage::class.java)) }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text("View Wholesome Moments")
         }
+
+        Button(onClick = { context.startActivity(Intent(context,ViewPreviousMood::class.java)) }, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 12.dp)) {
+            Text("View Recent Mood")
+        }
+
     }
 }
 
