@@ -93,7 +93,7 @@ fun NavGraph(
             val journalEntryViewModel: JournalEntryViewModel = viewModel(
                 factory = JournalEntryViewModel.JournalEntryViewModelFactory(context as androidx.activity.ComponentActivity)
             )
-            ViewAllJournalEntriesScreen(journalEntryViewModel, onBack = {
+            ViewAllJournalEntriesScreen(modifier,journalEntryViewModel, onBack = {
                 navController.navigate("home") {
                     popUpTo("home") { inclusive = false }
                 }
