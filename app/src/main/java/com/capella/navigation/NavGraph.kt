@@ -1,5 +1,7 @@
 package com.capella.navigation
 
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -9,6 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.capella.screens.HomeScreen
 import com.capella.screens.DailyLogScreen
@@ -27,6 +31,9 @@ fun NavGraph(
     navController: NavHostController = rememberNavController(),
 
 ) {
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     NavHost(navController = navController, startDestination = "welcome", modifier = modifier) {
         composable("welcome") {
             WelcomeScreen(onContinue = {
@@ -51,6 +58,8 @@ fun NavGraph(
 
             DailyLogScreen(
                 journalEntryViewModel = journalEntryViewModel,
+                snackbarHostState = snackbarHostState,
+                scope = scope,
                 onSaved = {
                     // returning to home after save
                     navController.navigate("home") {
@@ -72,7 +81,9 @@ fun NavGraph(
                     navController.navigate("home") {
                         popUpTo("home") { inclusive = false }
                     }
-                }
+                },
+                snackbarHostState = snackbarHostState,
+                scope = scope
             )
         }
 
