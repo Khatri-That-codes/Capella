@@ -39,8 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.capella.ui.theme.CapellaTheme
 import com.capella.data_class.TodoTask
+import com.capella.viewModel.TodoViewModel
 
 class ToDo: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +68,7 @@ class ToDo: ComponentActivity() {
 fun ToDoScreen(modifier: Modifier = Modifier,
                onBack: () -> Unit)
 {
-
+    val todoViewModel: TodoViewModel = viewModel()
     val tasks = remember {mutableStateListOf<TodoTask>()} // need to check if by or =
     var textFieldState by remember { mutableStateOf("") }
 
@@ -118,11 +120,12 @@ fun ToDoScreen(modifier: Modifier = Modifier,
                 TodoItem(
                     task = task,
                     onToggleDone = {
-                        // Update the list state
-                        val index = tasks.indexOf(task)
-                        tasks[index] = task.copy(isDone = !task.isDone)
+                        todoViewModel.toggleDone(task)
+//                        // Update the list state
+//                        val index = tasks.indexOf(task)
+//                        tasks[index] = task.copy(isDone = !task.isDone)
                     },
-                    onDelete = { tasks.remove(task) }
+                    onDelete = { todoViewModel.deleteTask(task)}
                 )
             }
         }
@@ -159,7 +162,9 @@ fun TodoItem(
 
             Text(
                 text = task.description,
-                modifier = Modifier.weight(1f).padding(start = 8.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
 
                 //strikthrough when task is done
                 textDecoration = if (task.isDone) TextDecoration.LineThrough else TextDecoration.None,
