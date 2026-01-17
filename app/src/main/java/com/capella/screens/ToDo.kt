@@ -2,6 +2,7 @@ package com.capella.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
@@ -125,6 +126,9 @@ fun ToDoScreen(modifier: Modifier = Modifier,
                 )
             }
         }
+    }
+    BackHandler {
+        onBack()
     }
 
 }
