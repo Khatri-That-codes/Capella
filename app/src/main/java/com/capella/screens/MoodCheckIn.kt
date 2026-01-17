@@ -43,6 +43,7 @@ import com.capella.ui.theme.CapellaTheme
 import com.capella.data_class.Emotion
 import com.capella.data_class.emotions
 import com.capella.models.MoodEntry
+import com.capella.navigation.AppScaffold
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -60,39 +61,46 @@ class MoodCheckIn : ComponentActivity() {
             this,
             MoodEntryViewModel.MoodEntryViewModelFactory(this@MoodCheckIn)
         )[MoodEntryViewModel::class.java]
+
         setContent {
             CapellaTheme {
-
                 val snackbarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    // snackbar code
-                    snackbarHost = { SnackbarHost(hostState = snackbarHostState){
-                            data ->
-                        Snackbar(
-                            snackbarData = data,
-                            containerColor = Color(0xFF7682C0), // light purple snackbar colour
-                            contentColor = Color.LightGray
+
+
+                AppScaffold(title = "Mood Check-In", showTopBar = true) { innerPadding ->
+                    // Nested scaffold provides snackbar host while preserving the topbar from AppScaffold
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState) { data ->
+                                Snackbar(
+                                    snackbarData = data,
+                                    containerColor = Color(0xFF7682C0),
+                                    contentColor = Color.LightGray
+                                )
+                            }
+                        }
+                    ) { contentPadding ->
+
+                        val combinedModifier = Modifier
+                            .padding(innerPadding)
+                            .padding(contentPadding)
+
+                        MoodSelectionScreen(
+                            modifier = combinedModifier,
+                            moodEntryViewModel = moodEntryViewModel,
+                            onSaved = { finish() },
+                            snackbarHostState = snackbarHostState,
+                            scope = scope
                         )
                     }
-                    }
-                    ) { innerPadding ->
-                    MoodSelectionScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        moodEntryViewModel = moodEntryViewModel,
-                        onSaved = {
-                            finish() // to return to home (prev screen)
-                        },
-                        snackbarHostState = snackbarHostState,
-                        scope = scope
-                    )
                 }
             }
         }
+
     }
 }
-
-
 @Composable
 fun MoodSelectionScreen(
     modifier: Modifier = Modifier,

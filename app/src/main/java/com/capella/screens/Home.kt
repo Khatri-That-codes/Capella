@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.QuoteViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.capella.navigation.AppScaffold
 import com.capella.navigation.AppTopBar
 
 
@@ -45,8 +46,8 @@ class Home : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CapellaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    topBar = { AppTopBar() }) { innerPadding ->
+                AppScaffold(title = "Daily Log", showTopBar = true)
+                { innerPadding ->
                     HomeScreen(
                         modifier = Modifier.padding(innerPadding)
                     )

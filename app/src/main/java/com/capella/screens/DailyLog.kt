@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.capella.models.JournalEntry
+import com.capella.navigation.AppScaffold
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.JournalEntryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +59,7 @@ import java.util.Date
 import java.util.Locale
 
 // Activity remains mostly unchanged; it provides snackbarHostState and scope to the screen
+
 class DailyLog : ComponentActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,31 +75,43 @@ class DailyLog : ComponentActivity() {
                 val snackbarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    snackbarHost = {
-                        SnackbarHost(hostState = snackbarHostState) { data ->
-                            Snackbar(
-                                snackbarData = data,
-                                containerColor = Color(0xFF7682C0),
-                                contentColor = Color.LightGray
-                            )
+
+                AppScaffold(title = "Daily Log", showTopBar = true) { innerPadding ->
+
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState) { data ->
+                                Snackbar(
+                                    snackbarData = data,
+                                    containerColor = Color(0xFF7682C0),
+                                    contentColor = Color.LightGray
+                                )
+                            }
                         }
+                    ) { contentPadding ->
+
+                        //combining the modifier
+                        val combinedModifier = Modifier
+                            .padding(innerPadding)
+                            .padding(contentPadding)
+
+                        DailyLogScreen(
+                            modifier = combinedModifier,
+                            journalEntryViewModel = journalEntryViewModel,
+                            onSaved = { finish()
+                                      },
+                            snackbarHostState = snackbarHostState,
+                            scope = scope
+                        )
                     }
-                ) { innerPadding ->
-                    DailyLogScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        journalEntryViewModel = journalEntryViewModel,
-                        onSaved = { finish() },
-                        snackbarHostState = snackbarHostState,
-                        scope = scope
-                    )
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyLogScreen(
     modifier: Modifier = Modifier,

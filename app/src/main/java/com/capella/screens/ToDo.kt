@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.capella.ui.theme.CapellaTheme
 import com.capella.data_class.TodoTask
+import com.capella.navigation.AppScaffold
 import com.capella.viewModel.TodoViewModel
 
 class ToDo: ComponentActivity() {
@@ -50,7 +51,8 @@ class ToDo: ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CapellaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                AppScaffold(title = "Daily Log", showTopBar = true)
+                { innerPadding ->
                     ToDoScreen(
                         modifier = Modifier.padding(innerPadding),
                         onBack = {

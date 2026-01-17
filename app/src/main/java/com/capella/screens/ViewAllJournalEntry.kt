@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.capella.models.JournalEntry
+import com.capella.navigation.AppScaffold
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.JournalEntryViewModel
 import com.capella.viewModel.JournalEntryViewModel.JournalEntryViewModelFactory
@@ -49,21 +50,27 @@ class ViewAllJournalEntry : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
+            this,
+            JournalEntryViewModelFactory(this@ViewAllJournalEntry)
+        )[JournalEntryViewModel::class.java]
+
         setContent {
             CapellaTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
-                        this,
-                        JournalEntryViewModelFactory(this@ViewAllJournalEntry)
-                    )[JournalEntryViewModel::class.java]
-                    ViewAllJournalEntriesScreen(
-                        journalEntryViewModel = journalEntryViewModel,
-                        onBack = {
-                            finish()
-                        })
+                AppScaffold(title = "All Journal Entries", showTopBar = true) { innerPadding ->
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        ViewAllJournalEntriesScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            journalEntryViewModel = journalEntryViewModel,
+                            onBack = { finish() }
+                        )
+                    }
                 }
             }
         }
@@ -72,6 +79,7 @@ class ViewAllJournalEntry : ComponentActivity() {
 
 @Composable
 fun ViewAllJournalEntriesScreen(
+    modifier: Modifier = Modifier,
     journalEntryViewModel: JournalEntryViewModel,
     onBack: () -> Unit
 ) {

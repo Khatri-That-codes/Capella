@@ -1,6 +1,7 @@
 package com.capella.screens
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 
 // this file is for a screen that shows all previous moods , going from
 // most recent to least recent mood entries
@@ -43,25 +44,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.capella.models.MoodEntry
+import com.capella.navigation.AppScaffold
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.MoodEntryViewModel
-
 class ViewPreviousMood : ComponentActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val moodEntryViewModel: MoodEntryViewModel = ViewModelProvider(
+            this,
+            MoodEntryViewModel.MoodEntryViewModelFactory(this@ViewPreviousMood)
+        )[MoodEntryViewModel::class.java]
+
         setContent {
             CapellaTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val moodEntryViewModel: MoodEntryViewModel = ViewModelProvider(
-                        this,
-                        MoodEntryViewModel.MoodEntryViewModelFactory(this@ViewPreviousMood)
-                    )[MoodEntryViewModel::class.java]
-
-                    PreviousMoodScreen(moodEntryViewModel =moodEntryViewModel)
+                AppScaffold(title = "Previous Moods", showTopBar = true) { innerPadding ->
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        PreviousMoodScreen(
+                            modifier = Modifier.padding(16.dp),
+                            moodEntryViewModel = moodEntryViewModel,
+                            onBack = { finish() }
+                        )
+                    }
                 }
             }
         }
@@ -70,7 +79,9 @@ class ViewPreviousMood : ComponentActivity() {
 
 @Composable
 fun PreviousMoodScreen(
-    moodEntryViewModel: MoodEntryViewModel
+    modifier: Modifier = Modifier,
+    moodEntryViewModel: MoodEntryViewModel,
+    onBack: () -> Unit
 ) {
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var moodEntries by rememberSaveable { mutableStateOf(listOf<MoodEntry>()) }
@@ -152,6 +163,9 @@ fun PreviousMoodScreen(
                 }
             }
         }
+    }
+    BackHandler {
+        onBack()
     }
 }
 

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.capella.models.JournalEntry
+import com.capella.navigation.AppScaffold
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.JournalEntryViewModel
 import com.capella.viewModel.JournalEntryViewModel.JournalEntryViewModelFactory
@@ -45,25 +46,31 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
+
 class ViewGratefulMessage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
+            this,
+            JournalEntryViewModelFactory(this@ViewGratefulMessage)
+        )[JournalEntryViewModel::class.java]
+
         setContent {
             CapellaTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val journalEntryViewModel: JournalEntryViewModel = ViewModelProvider(
-                        this,
-                        JournalEntryViewModelFactory(this@ViewGratefulMessage)
-                    )[JournalEntryViewModel::class.java]
-                    GratefulMessageScreen(
-                        journalEntryViewModel = journalEntryViewModel,
-                        onBack = {
-                            finish()
-                        })
+                AppScaffold(title = "Wholesome Moments", showTopBar = true) { innerPadding ->
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        GratefulMessageScreen(
+                            modifier = Modifier.padding(16.dp),
+                            journalEntryViewModel = journalEntryViewModel,
+                            onBack = { finish() }
+                        )
+                    }
                 }
             }
         }
@@ -72,6 +79,7 @@ class ViewGratefulMessage : ComponentActivity() {
 
 @Composable
 fun GratefulMessageScreen(
+    modifier: Modifier = Modifier,
     journalEntryViewModel: JournalEntryViewModel,
     onBack: () -> Unit
 ) {
