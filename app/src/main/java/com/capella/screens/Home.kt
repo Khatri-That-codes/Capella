@@ -6,12 +6,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.QuoteViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.capella.navigation.AppTopBar
 
 
 class Home : ComponentActivity() {
@@ -41,7 +45,8 @@ class Home : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CapellaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    topBar = { AppTopBar() }) { innerPadding ->
                     HomeScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
@@ -65,6 +70,7 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
+            .scrollable(state = rememberScrollState(), orientation = Orientation.Vertical)
     ) {
         Text(
             text = "Hey, $username!",
@@ -104,7 +110,7 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
 
         Row(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
