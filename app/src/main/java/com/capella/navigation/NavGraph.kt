@@ -16,6 +16,8 @@ import com.capella.screens.MoodSelectionScreen
 import com.capella.screens.ViewGratefulMessage
 import com.capella.screens.WelcomeScreen
 import com.capella.screens.ToDo
+import com.capella.screens.ToDoScreen
+import com.capella.screens.ViewAllJournalEntriesScreen
 import com.capella.viewModel.JournalEntryViewModel
 import com.capella.viewModel.MoodEntryViewModel
 
@@ -34,11 +36,11 @@ fun NavGraph(
             })
         }
 
-        composable("home") {
-            HomeScreen(
-                modifier = Modifier
-            )
-        }
+    composable("home") {
+        HomeScreen(
+            modifier = Modifier
+        )
+    }
 
         composable("daily_log") {
             // obtain ViewModel using activity context (MainActivity is ComponentActivity)
@@ -75,12 +77,27 @@ fun NavGraph(
         }
 
         composable("journals") {
-            // your journal list / grateful messages screen (assumes a composable entry point)
-            ViewGratefulMessage()
+
+            val context = LocalContext.current
+            val journalEntryViewModel: JournalEntryViewModel = viewModel(
+                factory = JournalEntryViewModel.JournalEntryViewModelFactory(context as androidx.activity.ComponentActivity)
+            )
+            ViewAllJournalEntriesScreen(journalEntryViewModel, onBack = {
+                navController.navigate("home") {
+                    popUpTo("home") { inclusive = false }
+                }
+            })
         }
 
         composable("Todo") {
-            ToDo()
+            ToDoScreen(modifier = Modifier,
+                onBack = {
+                    // navigating back to home upon back press
+                    navController.navigate("home") {
+                        popUpTo("home") { inclusive = false }
+                    }
+                }
+            )
         }
     }
 }

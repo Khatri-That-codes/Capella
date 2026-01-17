@@ -49,7 +49,11 @@ class ToDo: ComponentActivity() {
             CapellaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     ToDoScreen(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        onBack = {
+                            finish() // to close the activity and go back
+                        }
+
                     )
                 }
             }
@@ -58,7 +62,9 @@ class ToDo: ComponentActivity() {
 }
 
 @Composable
-fun ToDoScreen(modifier: Modifier = Modifier) {
+fun ToDoScreen(modifier: Modifier = Modifier,
+               onBack: () -> Unit)
+{
 
     val tasks = remember {mutableStateListOf<TodoTask>()} // need to check if by or =
     var textFieldState by remember { mutableStateOf("") }
