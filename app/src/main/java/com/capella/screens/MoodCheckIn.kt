@@ -19,11 +19,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +47,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import com.capella.viewModel.MoodEntryViewModel
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 class MoodCheckIn : ComponentActivity() {
@@ -56,13 +62,29 @@ class MoodCheckIn : ComponentActivity() {
         )[MoodEntryViewModel::class.java]
         setContent {
             CapellaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                val snackbarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    // snackbar code
+                    snackbarHost = { SnackbarHost(hostState = snackbarHostState){
+                            data ->
+                        Snackbar(
+                            snackbarData = data,
+                            containerColor = Color(0xFF7682C0), // light purple snackbar colour
+                            contentColor = Color.LightGray
+                        )
+                    }
+                    }
+                    ) { innerPadding ->
                     MoodSelectionScreen(
                         modifier = Modifier.padding(innerPadding),
                         moodEntryViewModel = moodEntryViewModel,
                         onSaved = {
                             finish() // to return to home (prev screen)
-                        }
+                        },
+                        snackbarHostState = snackbarHostState,
+                        scope = scope
                     )
                 }
             }
@@ -75,12 +97,15 @@ class MoodCheckIn : ComponentActivity() {
 fun MoodSelectionScreen(
     modifier: Modifier = Modifier,
     moodEntryViewModel: MoodEntryViewModel,
-    onSaved: () ->Unit
+    onSaved: () ->Unit,
+    snackbarHostState: SnackbarHostState,
+    scope: CoroutineScope
 )
 {
     // State to keep track of which emotion is selected
     var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
     var currentContext = LocalContext.current
+
 
 
     val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
@@ -102,7 +127,8 @@ fun MoodSelectionScreen(
             columns = GridCells.Fixed(4), // having 4 items per row
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+        )
+        {
             items(emotions) { emotion ->
                 EmotionItem(
                     emotion = emotion,
@@ -111,6 +137,8 @@ fun MoodSelectionScreen(
                 )
             }
         }
+
+
 
 
         selectedEmotion?.let {
@@ -126,8 +154,15 @@ fun MoodSelectionScreen(
 
                     moodEntryViewModel.insertMoodEntry(entry)
 
+                    scope.launch {
+
+                        snackbarHostState.showSnackbar(
+                            message = " Your mood '${it.icon}' has been recorded!",
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
                     //toast message
-                    Toast.makeText(currentContext, "Mood '${it.icon}' saved!\n OK to be Moody!", Toast.LENGTH_SHORT).show()
+                  //  Toast.makeText(currentContext, "Mood '${it.icon}' saved!\n OK to be Moody!", Toast.LENGTH_SHORT).show()
 
                     onSaved()
                 },
@@ -172,5 +207,7 @@ fun EmotionItem(
         )
     }
 }
+
+
 
 

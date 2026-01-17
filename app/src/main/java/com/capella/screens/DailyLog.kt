@@ -25,14 +25,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.platform.LocalContext
 
@@ -42,6 +48,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.capella.models.JournalEntry
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.JournalEntryViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.lang.Long
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -59,14 +67,31 @@ class DailyLog :ComponentActivity() {
 
         setContent{
             CapellaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                val snackbarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    // snackbar code
+                    snackbarHost = { SnackbarHost(hostState = snackbarHostState){
+                            data ->
+                        Snackbar(
+                            snackbarData = data,
+                            containerColor = Color(0xFF7682C0), // light purple snackbar colour
+                            contentColor = Color.LightGray
+                        )
+                    }
+                    }
+                    ) { innerPadding ->
                     DailyLogScreen(
                         modifier = Modifier.padding(innerPadding),
                         journalEntryViewModel = journalEntryViewModel,
                         onSaved = {
                             finish() // to return to home screen after saving
 
-                        }
+                        },
+                        snackbarHostState = snackbarHostState,
+                        scope = scope
                     )
                 }
             }
@@ -75,13 +100,14 @@ class DailyLog :ComponentActivity() {
     }
 }
 
-// TODO: add save button to store data locally or in database   , home button/ nav bar,  back button.
 
 @Composable
 fun DailyLogScreen(
     modifier: Modifier = Modifier,
                    journalEntryViewModel: JournalEntryViewModel,
-                   onSaved: () ->Unit
+                   onSaved: () ->Unit,
+                     snackbarHostState: SnackbarHostState,
+        scope: CoroutineScope
 ) {
 
     val context = LocalContext.current
@@ -225,12 +251,22 @@ fun DailyLogScreen(
                     journalEntryViewModel.insertJournalEntry(entry)
 
 
-                    // successful toast
-                    Toast.makeText(
-                        context,
-                        "Journal Entry Saved! \n Keep it up! You're doing great! \uD83D\uDE0A",
-                        Toast.LENGTH_LONG
-                    ).show()
+//                    // successful toast
+//                    Toast.makeText(
+//                        context,
+//                        "Journal Entry Saved! \n Keep it up! You're doing great! \uD83D\uDE0A",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+
+                    scope.launch {
+
+                        snackbarHostState.showSnackbar(
+                            message = "Journal Entry Saved! \n Keep it up! You're doing great! 😊",
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
+
+                    onSaved()
                 }
             ){
                 Text(
