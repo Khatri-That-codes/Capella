@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 
 
 import androidx.compose.foundation.layout.Spacer
@@ -119,16 +120,30 @@ fun PreviousMoodScreen(
                                 horizontalAlignment = Alignment.Start,
                                 verticalArrangement = Arrangement.Center
                             ) {
-                                Text(
-                                    text = "Date: ${entry.date}",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Date: ${entry.date}",
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "Time: ${entry.timestamp}",
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                                 Spacer(modifier = Modifier.height(8.dp))
+
+
                                 Text(
                                     text = "Mood: ${entry.moodEmotion}",
                                     fontSize = 16.sp
                                 )
+
+
                                 Spacer(modifier = Modifier.height(4.dp))
 
                             }

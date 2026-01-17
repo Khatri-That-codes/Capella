@@ -124,7 +124,7 @@ fun MoodSelectionScreen(
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(4), // having 4 items per row
+            columns = GridCells.Fixed(3),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         )
@@ -148,8 +148,7 @@ fun MoodSelectionScreen(
                         id = 0,
                         date = currentDate,
                         timestamp = System.currentTimeMillis(),
-                        moodEmotion = it.icon,
-
+                        moodEmotion = "${it.icon} - ${it.label}",
                         )
 
                     moodEntryViewModel.insertMoodEntry(entry)
