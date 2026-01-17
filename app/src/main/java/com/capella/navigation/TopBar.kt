@@ -1,3 +1,4 @@
+// kotlin
 package com.capella.navigation
 
 import androidx.compose.foundation.Image
@@ -5,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -26,7 +29,9 @@ fun AppTopBar(
     backgroundColor: Color = MaterialTheme.colorScheme.primary
 ) {
     CenterAlignedTopAppBar(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .statusBarsPadding(),
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
@@ -42,6 +47,9 @@ fun AppTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = backgroundColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = backgroundColor,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
+        )
     )
 }
