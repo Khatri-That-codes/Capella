@@ -1,6 +1,6 @@
 package com.capella.repository
 
-import com.capella.AppDatabase
+import com.capella.database.AppDatabase
 import android.content.Context
 import com.capella.models.JournalEntry
 
