@@ -100,17 +100,13 @@ fun WelcomeScreen(modifier: Modifier = Modifier,
             }
         ) {
             Text(
-                text = "Okie Dokie! Let's Start ",
+                text = "Let's Start ",
                 fontSize = 16.sp)
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Text(
-            text = "Designed with Love, Jena 😊😊",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(15.dp)
-        )
+
 
     }
 }
