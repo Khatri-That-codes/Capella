@@ -90,24 +90,64 @@ fun WelcomeScreen(modifier: Modifier = Modifier,
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Button(
-            onClick = {
-                onContinue()
+        StartButton(
+            onContinue = onContinue
+        )
 
-              // context.startActivity(Intent(context, Home::class.java))
-
-
-            }
-        ) {
-            Text(
-                text = "Let's Start ",
-                fontSize = 16.sp)
-        }
+//        Button(
+//            onClick = {
+//                onContinue()
+//
+//              // context.startActivity(Intent(context, Home::class.java))
+//
+//
+//            }
+//        ) {
+//            Text(
+//                text = "Let's Start ",
+//                fontSize = 16.sp)
+//        }
 
         Spacer(modifier = Modifier.height(30.dp))
 
 
 
+    }
+}
+
+
+@Composable
+fun StartButton(onContinue: () -> Unit) {
+    ElevatedButton(
+        onClick = onContinue,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .padding(horizontal = 24.dp)
+            .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium),
+        shape = MaterialTheme.shapes.medium.copy(all = androidx.compose.foundation.shape.CornerSize(14.dp)),
+        colors = ButtonDefaults.elevatedButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Let’s Start",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = "Start",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
