@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
@@ -33,7 +33,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,7 +57,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Activity remains mostly unchanged; it provides snackbarHostState and scope to the screen
 
 class DailyLog : ComponentActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -100,7 +98,7 @@ class DailyLog : ComponentActivity() {
                             modifier = combinedModifier,
                             journalEntryViewModel = journalEntryViewModel,
                             onSaved = { finish()
-                                      },
+                            },
                             snackbarHostState = snackbarHostState,
                             scope = scope
                         )
@@ -110,7 +108,6 @@ class DailyLog : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyLogScreen(
@@ -131,15 +128,11 @@ fun DailyLogScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState()) // <- make the page scrollable
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        TopAppBar(
-            title = { Text(text = "Daily Log") },
-            modifier = Modifier.fillMaxWidth(),
-        )
 
-        // Date / Time row as small cards (chips)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -179,16 +172,13 @@ fun DailyLogScreen(
         ) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = "Mood", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
-                // keep the composable returned value
                 userMood = moodDropDownMenu(context, initial = userMood)
             }
         }
 
-        // Message input card (expanded)
+        // Message input card (expanded) — removed .weight so it can scroll
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f, fill = false),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
         ) {
@@ -235,7 +225,7 @@ fun DailyLogScreen(
                     scope.launch {
                         snackbarHostState.showSnackbar(
                             message = "Journal Entry Saved! Keep it up! 😊",
-                            duration = SnackbarDuration.Short,
+                            duration = SnackbarDuration.Long,
                         )
                     }
                     onSaved()
@@ -272,6 +262,7 @@ fun moodDropDownMenu(context: Context, initial: String = ""): String {
             },
             shape = RoundedCornerShape(10.dp)
         )
+
         androidx.compose.material3.DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
@@ -288,5 +279,6 @@ fun moodDropDownMenu(context: Context, initial: String = ""): String {
             }
         }
     }
+
     return userMood
 }
