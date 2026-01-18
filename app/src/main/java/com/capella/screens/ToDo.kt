@@ -70,11 +70,6 @@ fun ToDoScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "To-Do List",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
 
         Row(
             modifier = Modifier

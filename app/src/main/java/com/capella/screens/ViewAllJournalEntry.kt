@@ -101,12 +101,15 @@ fun ViewAllJournalEntriesScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        Text(
-            text = "All Journal Entries",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
-        )
+//        Text(
+//            text = "All Journal Entries",
+//            style = MaterialTheme.typography.headlineMedium,
+//            modifier = Modifier
+//                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+//        )
+
+
+       // Spacer(modifier = Modifier.height(4.dp))
 
         if (isLoading) {
             Column(
@@ -135,7 +138,7 @@ fun ViewAllJournalEntriesScreen(
                 }
             } else {
                 LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = PaddingValues(4.dp),
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {

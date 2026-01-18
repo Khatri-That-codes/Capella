@@ -42,9 +42,9 @@ fun NavGraph(
             })
         }
 
-    composable("home") {
+    composable("Home") {
         HomeScreen(
-//            modifier = Modifier
+         modifier = Modifier
         )
     }
 
@@ -86,7 +86,7 @@ fun NavGraph(
             )
         }
 
-        composable("journals") {
+        composable("Journals") {
 
             val context = LocalContext.current
             val journalEntryViewModel: JournalEntryViewModel = viewModel(
@@ -99,7 +99,7 @@ fun NavGraph(
             })
         }
 
-        composable("Todo") {
+        composable("To-Do List") {
             ToDoScreen(modifier = Modifier,
                 onBack = {
                     // navigating back to home upon back press

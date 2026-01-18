@@ -20,9 +20,9 @@ private data class NavItem(val route: String, val label: String, val icon: Image
 @Composable
 fun BottomBar(navController: NavController) {
     val items = listOf(
-        NavItem("Todo", "Todo", Icons.AutoMirrored.Filled.List),
-        NavItem("home", "Home", Icons.Outlined.Home),
-        NavItem("journals", "Journals", Icons.Outlined.DateRange) // need to find a better icon
+        NavItem("To-Do List", "Todo", Icons.AutoMirrored.Filled.List),
+        NavItem("Home", "Home", Icons.Outlined.Home),
+        NavItem("Journals", "Journals", Icons.Outlined.DateRange) // need to find a better icon
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
