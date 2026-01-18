@@ -241,10 +241,12 @@ fun DailyLogScreen(
     }
 }
 
+
 @Composable
 fun moodDropDownMenu(context: Context, initial: String = ""): String {
     var expanded by remember { mutableStateOf(false) }
     var userMood by remember { mutableStateOf(initial) }
+    val moods = listOf("Happy", "Sad", "Angry", "Excited", "Anxious", "Relaxed")
 
     Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
@@ -267,18 +269,28 @@ fun moodDropDownMenu(context: Context, initial: String = ""): String {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            val moods = listOf("Happy", "Sad", "Angry", "Excited", "Anxious", "Relaxed")
-            moods.forEach { mood ->
-                androidx.compose.material3.DropdownMenuItem(
-                    text = { Text(mood) },
-                    onClick = {
-                        userMood = mood
-                        expanded = false
+
+            androidx.compose.material3.Surface(
+                color = MaterialTheme.colorScheme.surfaceTint,
+                tonalElevation = 8.dp,
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+            ) {
+                Column {
+                    moods.forEach { mood ->
+                        androidx.compose.material3.DropdownMenuItem(
+                            text = { Text(mood) },
+                            onClick = {
+                                userMood = mood
+                                expanded = false
+                            }
+                        )
                     }
-                )
+                }
             }
         }
     }
 
     return userMood
 }
+

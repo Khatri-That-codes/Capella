@@ -73,7 +73,7 @@ class ViewAllJournalEntry : ComponentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
                         ViewAllJournalEntriesScreen(
-                            modifier = Modifier.padding(innerPadding),
+                            modifier = Modifier.padding(16.dp),
                             journalEntryViewModel = journalEntryViewModel,
                             onBack = { finish() }
                         )
@@ -94,13 +94,14 @@ fun ViewAllJournalEntriesScreen(
     var journalEntries by rememberSaveable { mutableStateOf(listOf<JournalEntry>()) }
 
     LaunchedEffect(Unit) {
-        journalEntries = journalEntryViewModel.getAllJournalEntries()
+        journalEntries = journalEntryViewModel.getAllJournalEntries().sortedByDescending { it.date}
         isLoading = false
     }
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//    Column(
+//        modifier = modifier.fillMaxSize()
+//    ) {
 //        Text(
 //            text = "All Journal Entries",
 //            style = MaterialTheme.typography.headlineMedium,
@@ -138,9 +139,12 @@ fun ViewAllJournalEntriesScreen(
                 }
             } else {
                 LazyColumn(
-                    contentPadding = PaddingValues(4.dp),
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .padding(16.dp),
+//                    contentPadding = PaddingValues(4.dp),
+//                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)//Arrangement.spacedBy(12.dp)
                 ) {
                     items(journalEntries) { entry ->
                         JournalEntryCard(journalEntry = entry)
