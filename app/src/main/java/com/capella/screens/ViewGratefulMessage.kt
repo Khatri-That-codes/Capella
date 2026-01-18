@@ -94,17 +94,19 @@ fun GratefulMessageScreen(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
 
-        Text(
-            text = "Your Wholesome Moments",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
-        )
+        Spacer(modifier = Modifier.height(14.dp))
+
+//        Text(
+//            text = "Your Wholesome Moments",
+//            style = MaterialTheme.typography.headlineMedium,
+//            modifier = Modifier
+//                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+//        )
         if (isLoading) {
             // Show loading indicator while fetching data
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(0.8f)
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally

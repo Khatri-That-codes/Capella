@@ -1,7 +1,7 @@
 package com.capella.repository
 
 import android.content.Context
-import com.capella.AppDatabase
+import com.capella.database.AppDatabase
 import com.capella.models.MoodEntry
 import com.capella.dao.MoodDao
 
