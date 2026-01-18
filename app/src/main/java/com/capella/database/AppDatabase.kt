@@ -1,4 +1,4 @@
-package com.capella
+package com.capella.database
 
 import androidx.room.Room
 import androidx.room.Database
