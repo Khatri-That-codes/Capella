@@ -9,37 +9,68 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+//    primary = Purple40,
+//    secondary = Purple40,
+//    tertiary = Pink80,
+//    background = Pink40,
+//    surface = Pink40,
+//
+//    onPrimary = LightYellow,
+//    onBackground = EarthyGreen,
+//    onSurface = EarthyGreen,
+//
+
+    primary = Primary,
+    onPrimary = OnPrimary,
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    background = Background,
+    surface = SurfaceColor,
+    onBackground = OnPrimary,
+    onSurface = OnPrimary,
+    error = Color(0xFFB00020),
+    onError = Color.White
+
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+//    primary = Purple40,
+//    secondary = PurpleGrey40,
+//    tertiary = Pink80,
+//
+//    onPrimary = LightYellow,
+//
+//    background = Pink80,
+//    surface = Pink80,
+//    onBackground = EarthyGreen,
+//    onSurface = EarthyGreen,
 
-    onPrimary = LightYellow,
+    primary = Primary,
+    onPrimary = OnPrimary,
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    background = Color(0xFFFFFFFF),
+    surface = Color(0xFFFFFFFF),
+    onBackground = Color.Black,
+    onSurface = Color.Black,
+    error = Color(0xFFB00020),
+    onError = Color.White
 
-    background = BlueBlack,
-    surface = BlueBlack,
-    onBackground = LightYellow,
-    onSurface = LightYellow,
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
+/* Other default colors to override
+background = Color(0xFFFFFBFE),
+surface = Color(0xFFFFFBFE),
+onPrimary = Color.White,
+onSecondary = Color.White,
+onTertiary = Color.White,
+onBackground = Color(0xFF1C1B1F),
+onSurface = Color(0xFF1C1B1F),
+*/
 @Composable
 fun CapellaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
