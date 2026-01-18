@@ -34,8 +34,20 @@ This project is built using Kotlin and Android Jetpack components, following mod
    - Create or start an AVD, then click Run ▶ in Android Studio, or use:
      ./gradlew installDebug
 
+### App Installation on Device for Use
+Currently only Android is supported and can be installed on Android Device via Android Studio.
 
-Project structure (high level)
+- Install via Android Studio (USB)
+  1. Enable Developer options: Settings → About phone → tap Build number 7 times.
+  2. Enable USB debugging: Settings → System → Developer options → USB debugging.
+  3. Connect device via USB, accept the prompt on device.
+  4. In Android Studio click Run \▶ or install from terminal:
+     - Use the Gradle wrapper:
+        `./gradlew installDebug`
+     - Or install an APK with ADB:
+        `adb install -r app/build/outputs/apk/debug/app-debug.apk`
+
+### Project structure (high level)
 - app/               — Android application module
 - build/             — build outputs (generated)
 - gradle/            — Gradle related config (wrapper)
