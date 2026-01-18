@@ -18,11 +18,17 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = Purple80,
     secondary = PurpleGrey40,
     tertiary = Pink40,
 
     onPrimary = LightYellow,
+
+    background = BlueBlack,
+    surface = BlueBlack,
+    onBackground = LightYellow,
+    onSurface = LightYellow,
+
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -38,7 +44,7 @@ private val LightColorScheme = lightColorScheme(
 fun CapellaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false ,// true, will not be using system theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
