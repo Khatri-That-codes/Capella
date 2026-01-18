@@ -47,6 +47,10 @@ import com.capella.models.MoodEntry
 import com.capella.navigation.AppScaffold
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.MoodEntryViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class ViewPreviousMood : ComponentActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,10 +144,22 @@ fun PreviousMoodScreen(
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold
                                     )
+                                    //time
+                                    val formattedTime = try {
+                                        if (entry.timestamp > 0L) {
+                                            SimpleDateFormat("HH:mm", Locale.getDefault()).format(
+                                                Date(entry.timestamp)
+                                            )
+                                        } else {
+                                            "N/A"
+                                        }
+                                    } catch (e: Exception) {
+                                        "N/A"
+                                    }
                                     Text(
-                                        text = "Time: ${entry.timestamp}",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
+                                        text = "Time: $formattedTime",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(8.dp))
