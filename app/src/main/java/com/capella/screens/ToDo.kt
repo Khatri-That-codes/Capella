@@ -25,11 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,15 +50,8 @@ class ToDo: ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CapellaTheme {
-                AppScaffold(title = "Daily Log", showTopBar = true)
-                { innerPadding ->
-                    ToDoScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        onBack = {
-                            finish() // to close the activity and go back
-                        }
-
-                    )
+                AppScaffold(title = "To-Do", showTopBar = true) { innerPadding ->
+                    ToDoScreen(modifier = Modifier.padding(innerPadding), onBack = { finish() })
                 }
             }
         }
@@ -67,15 +59,14 @@ class ToDo: ComponentActivity() {
 }
 
 @Composable
-fun ToDoScreen(modifier: Modifier = Modifier,
-               onBack: () -> Unit)
-{
+fun ToDoScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
     val todoViewModel: TodoViewModel = viewModel()
-    val tasks = remember {mutableStateListOf<TodoTask>()} // need to check if by or =
+    val tasksState = todoViewModel.tasks.collectAsState()
+    val tasks = tasksState.value
     var textFieldState by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
@@ -85,7 +76,6 @@ fun ToDoScreen(modifier: Modifier = Modifier,
             fontWeight = FontWeight.Bold
         )
 
-        // tasks input area
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,8 +93,8 @@ fun ToDoScreen(modifier: Modifier = Modifier,
             Button(
                 onClick = {
                     if (textFieldState.isNotBlank()) {
-                        tasks.add(TodoTask(id = tasks.size, description = textFieldState))
-                        textFieldState = "" // Clear input
+                        todoViewModel.addTask(textFieldState)
+                        textFieldState = ""
                     }
                 }
             ) {
@@ -112,51 +102,38 @@ fun ToDoScreen(modifier: Modifier = Modifier,
             }
         }
 
-        // will store tasks using lazy column
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-
             items(tasks, key = { it.id }) { task ->
                 TodoItem(
                     task = task,
-                    onToggleDone = {
-                        todoViewModel.toggleDone(task)
-//                        // Update the list state
-//                        val index = tasks.indexOf(task)
-//                        tasks[index] = task.copy(isDone = !task.isDone)
-                    },
-                    onDelete = { todoViewModel.deleteTask(task)}
+                    onToggleDone = { todoViewModel.toggleDone(task) },
+                    onDelete = { todoViewModel.deleteTask(task) }
                 )
             }
         }
     }
-    BackHandler {
-        onBack()
-    }
-
+    BackHandler { onBack() }
 }
-
 
 @Composable
 fun TodoItem(
     task: TodoTask,
     onToggleDone: () -> Unit,
     onDelete: () -> Unit
-){
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-
-        // refer this to change card elevation
         elevation = cardElevation(defaultElevation = 2.dp)
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Checkbox(
                 checked = task.isDone,
                 onCheckedChange = { onToggleDone() }
@@ -167,19 +144,13 @@ fun TodoItem(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
-
-                //strikthrough when task is done
                 textDecoration = if (task.isDone) TextDecoration.LineThrough else TextDecoration.None,
                 color = if (task.isDone) Color.Gray else Color.Black
             )
-            IconButton(
-                onClick = { onDelete() }
-            ) {
-                Icon(Icons.Default.Delete,
-                    contentDescription = "Delete Task", tint = Color.Red)
 
+            IconButton(onClick = { onDelete() }) {
+                Icon(Icons.Default.Delete, contentDescription = "Delete Task", tint = Color.Red)
             }
         }
     }
-
 }
