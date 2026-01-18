@@ -1,6 +1,6 @@
 package com.capella.navigation
 
-import androidx.compose.material3.SnackbarHost
+import com.capella.screens.DailyLogScreen
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.capella.screens.HomeScreen
-import com.capella.screens.DailyLogScreen
 import com.capella.screens.MoodSelectionScreen
 import com.capella.screens.ViewGratefulMessage
 import com.capella.screens.WelcomeScreen
@@ -45,7 +44,7 @@ fun NavGraph(
 
     composable("home") {
         HomeScreen(
-            modifier = Modifier
+//            modifier = Modifier
         )
     }
 

@@ -165,7 +165,7 @@ fun MoodSelectionScreen(
 
                         snackbarHostState.showSnackbar(
                             message = " Your mood '${it.icon}' has been recorded!",
-                            duration = SnackbarDuration.Short,
+                            duration = SnackbarDuration.Long,
                         )
                     }
                     //toast message
