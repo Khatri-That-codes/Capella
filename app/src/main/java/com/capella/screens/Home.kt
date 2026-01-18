@@ -52,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.capella.navigation.AppScaffold
 import com.capella.network.PicGenerator
 import com.capella.ui.theme.CapellaTheme
+import com.capella.ui.theme.EarthyGreen
 import com.capella.viewModel.QuoteViewModel
 
 class Home : ComponentActivity() {
@@ -92,28 +93,28 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(4.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                painter = painterResource(id = com.capella.R.drawable.capella_logo),
-                contentDescription = "Capella Logo",
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(
-                text = "Capella",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                ),
-                textAlign = TextAlign.Left
-            )
-        }
+
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.Start,
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Icon(
+//                painter = painterResource(id = com.capella.R.drawable.capella_logo),
+//                contentDescription = "Capella Logo",
+//                modifier = Modifier.size(40.dp)
+//            )
+//            Spacer(modifier = Modifier.padding(4.dp))
+//            Text(
+//                text = "Capella",
+//                style = MaterialTheme.typography.headlineMedium.copy(
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 28.sp
+//                ),
+//                textAlign = TextAlign.Left
+//            )
+//        }
 
 
         HorizontalDivider()
@@ -143,7 +144,7 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
                 QuoteCard(quote = uiState.quote!!, onRefresh = { viewModel.refresh() })
             }
         }
-
+        HorizontalDivider()
         // buttons
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -153,14 +154,14 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
                 HomeActionCard(
                     label = "Daily Log",
                     icon = Icons.Default.Edit,
-                    containerColor = Color(0xFF0B1020),
+                    containerColor = EarthyGreen,
                     onClick = { context.startActivity(Intent(context, DailyLog::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
                 HomeActionCard(
                     label = "Mood Check-In",
                     icon = Icons.Default.AddCircle,
-                    containerColor = Color(0xFFFFD166),
+                    containerColor = EarthyGreen,
                     onClick = { context.startActivity(Intent(context, MoodCheckIn::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
@@ -170,14 +171,14 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
                 HomeActionCard(
                     label = "Wholesome Moments",
                     icon = Icons.Default.FavoriteBorder,
-                    containerColor = Color(0xFF7C4DFF) ,
+                    containerColor = EarthyGreen,
                     onClick = { context.startActivity(Intent(context, ViewGratefulMessage::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
                 HomeActionCard(
                     label = "Recent Moods",
                     icon = Icons.Default.Face,
-                    containerColor = Color(0xFF2EC4B6),
+                    containerColor = EarthyGreen,
                     onClick = { context.startActivity(Intent(context, ViewPreviousMood::class.java)) },
                     modifier = Modifier.weight(1f)
                 )

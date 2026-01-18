@@ -16,11 +16,11 @@ val BlueBlack = Color(0xFF010C19)
 val EarthyGreen = Color(0xFF5D866C)
 
 // recommended colors
-val Primary = Color(0xFF0B1230)
+val Primary = EarthyGreen
 val OnPrimary = Color(0xFFFFEA70)
 val Secondary = Color(0xFF7B4BE6)
 val OnSecondary = Color(0xFFFFFFFF)
-val Background = Color(0xFF000000)
+val Background = Color(0xFF0B1230)
 val SurfaceColor = Color(0xFF0B1230)
 val TextPrimary = OnPrimary
 val Disabled = Color(0xFF6B6B6B)

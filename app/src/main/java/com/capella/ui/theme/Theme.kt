@@ -50,13 +50,13 @@ private val LightColorScheme = lightColorScheme(
 //    onSurface = EarthyGreen,
 
     primary = Primary,
-    onPrimary = OnPrimary,
+    onPrimary = Color.White,
     secondary = Secondary,
     onSecondary = OnSecondary,
-    background = Color(0xFFFFFFFF),
-    surface = Color(0xFFFFFFFF),
+    background = Pink80,
+    surface = Pink80.copy(alpha = 0.12f),
     onBackground = Color.Black,
-    onSurface = Color.Black,
+    onSurface = SurfaceColor,
     error = Color(0xFFB00020),
     onError = Color.White
 
