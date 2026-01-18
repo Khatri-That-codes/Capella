@@ -1,26 +1,36 @@
 
 package com.capella.viewModel
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.capella.repository.TodoRepository
+import com.capella.database.TodoDatabase
 import com.capella.data_class.TodoTask
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class TodoViewModel : ViewModel() {
-    private val _tasks = mutableStateListOf<TodoTask>()
-    val tasks: List<TodoTask> get() = _tasks
+class TodoViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository = TodoRepository(TodoDatabase.getInstance(application).todoDao())
+
+    val tasks: StateFlow<List<TodoTask>> =
+        repository.getAllTasks().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun addTask(description: String) {
         if (description.isBlank()) return
-        val nextId = if (_tasks.isEmpty()) 0 else (_tasks.maxOf { it.id } + 1)
-        _tasks.add(TodoTask(id = nextId, description = description))
+        viewModelScope.launch { repository.addTask(description) }
     }
 
     fun toggleDone(task: TodoTask) {
-        val idx = _tasks.indexOf(task)
-        if (idx >= 0) _tasks[idx] = task.copy(isDone = !task.isDone)
+        viewModelScope.launch {
+            repository.updateTask(task.copy(isDone = !task.isDone))
+        }
     }
 
     fun deleteTask(task: TodoTask) {
-        _tasks.remove(task)
+        viewModelScope.launch { repository.deleteTask(task) }
     }
 }
+
