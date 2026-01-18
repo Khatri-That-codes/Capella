@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -36,12 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.capella.navigation.AppScaffold
+import com.capella.network.PicGenerator
 import com.capella.ui.theme.CapellaTheme
 import com.capella.viewModel.QuoteViewModel
 
@@ -83,25 +87,35 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
             style = MaterialTheme.typography.headlineMedium
         )
 
-        Divider()
+        HorizontalDivider()
 
         when {
             uiState.isLoading -> {
                 CircularProgressIndicator()
             }
+
+            // when there is an error to load quote -- will show a picture instead
             uiState.error != null -> {
-                Text(
-                    text = "Failed to load quote",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.error
+
+                Image(
+                    painter = painterResource(id = PicGenerator.randomRes()),
+                    contentDescription = "MV  - Quote Placeholder",
+                    modifier = Modifier.size(200.dp)
                 )
+
+
+//                Text(
+//                    text = "Failed to load quote",
+//                    style = MaterialTheme.typography.bodyMedium,
+//                    color = MaterialTheme.colorScheme.error
+//                )
             }
             uiState.quote != null -> {
                 QuoteCard(quote = uiState.quote!!, onRefresh = { viewModel.refresh() })
             }
         }
 
-        // buttons...
+        // buttons
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
