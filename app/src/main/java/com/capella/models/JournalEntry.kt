@@ -1,11 +1,13 @@
 package com.capella.models
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 
 // need to check the details required for user
-
+@Parcelize
 @Entity(tableName = "journal_entry")
 data class JournalEntry(
     @PrimaryKey(autoGenerate = true)
@@ -22,4 +24,4 @@ data class JournalEntry(
 
 
 
-)
+) : Parcelable

@@ -11,12 +11,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
@@ -36,11 +39,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -74,18 +79,42 @@ class Home : ComponentActivity() {
 fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
+
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(20.dp)
+            .verticalScroll(scrollState),
+
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Hey, Buddy \uD83D\uDE0B",
-            style = MaterialTheme.typography.headlineMedium
-        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = com.capella.R.drawable.capella_logo),
+                contentDescription = "Capella Logo",
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.padding(4.dp))
+            Text(
+                text = "Capella",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp
+                ),
+                textAlign = TextAlign.Left
+            )
+        }
+
 
         HorizontalDivider()
 
@@ -124,14 +153,14 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
                 HomeActionCard(
                     label = "Daily Log",
                     icon = Icons.Default.Edit,
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color(0xFF0B1020),
                     onClick = { context.startActivity(Intent(context, DailyLog::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
                 HomeActionCard(
                     label = "Mood Check-In",
                     icon = Icons.Default.AddCircle,
-                    containerColor = MaterialTheme.colorScheme.secondary,
+                    containerColor = Color(0xFFFFD166),
                     onClick = { context.startActivity(Intent(context, MoodCheckIn::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
@@ -141,14 +170,14 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: QuoteViewModel = viewMo
                 HomeActionCard(
                     label = "Wholesome Moments",
                     icon = Icons.Default.FavoriteBorder,
-                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    containerColor = Color(0xFF7C4DFF) ,
                     onClick = { context.startActivity(Intent(context, ViewGratefulMessage::class.java)) },
                     modifier = Modifier.weight(1f)
                 )
                 HomeActionCard(
                     label = "Recent Moods",
                     icon = Icons.Default.Face,
-                    containerColor = MaterialTheme.colorScheme.error,
+                    containerColor = Color(0xFF2EC4B6),
                     onClick = { context.startActivity(Intent(context, ViewPreviousMood::class.java)) },
                     modifier = Modifier.weight(1f)
                 )

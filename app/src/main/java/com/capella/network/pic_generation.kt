@@ -9,7 +9,7 @@ import com.capella.R
 object PicGenerator{
 
     val samplePics = listOf(R.drawable.rb19,
-        R.drawable.max_bw,
+
         R.drawable.rb19_2,
         R.drawable.max_helmet,
         R.drawable.helmet_sideways,
